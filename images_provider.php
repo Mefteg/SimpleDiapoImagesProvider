@@ -77,8 +77,20 @@ for ($i=0; $i < $file_count; ++$i)
 
 // By default, order array by file modification time (newer first).
 $sort_success = usort($images, function($a, $b) {
-	return $a[$JSON_MODIFICATION_TIME_KEY] <=> $b[$JSON_MODIFICATION_TIME_KEY];
+	if ($a[$JSON_MODIFICATION_TIME_KEY] < $b[$JSON_MODIFICATION_TIME_KEY])
+	{
+		return -1;
+	}
+	else if ($a[$JSON_MODIFICATION_TIME_KEY] > $b[$JSON_MODIFICATION_TIME_KEY])
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
 });
+
 if ($sort_success == FALSE)
 {
 	$json[$JSON_ERROR_KEY] = "Not able to properly sort found images.";
