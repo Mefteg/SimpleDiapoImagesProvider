@@ -31,6 +31,7 @@ $json = [];
 $json['version'] = $VERSION;
 
 $json[$JSON_COUNT_KEY] = $count;
+$json[$JSON_SORT_KEY] = $sort;
 
 // Get all files from the current directory.
 $files = scandir(".");
