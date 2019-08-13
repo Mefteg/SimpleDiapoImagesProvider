@@ -65,6 +65,56 @@ class ImagesProvider
 				continue;
 			}
 
+			if (stristr($file, "simpleslideshow_resized") == FALSE)
+			{
+				$resized_image_filename = $file . "simpleslideshow_resized.jpg";
+
+				if (file_exists($resized_image_filename) == TRUE)
+				{
+					// The file already has been resized already.
+					continue;
+				}
+
+				// Create a resized file if necessary.
+				$image_size = getimagesize($file);
+				$image_width = $image_size[0];
+				$image_height = $image_size[1];
+
+				if ($image_width > 1920 || $image_height > 1080)
+				{
+					// Compute new image ratios.
+					$width_ratio = 1;
+					$height_ratio = 1;
+
+					if ($image_width > $image_height)
+					{
+						$width_ratio = 1920 / $image_width;
+						$height_ratio = $width_ratio;
+					}
+					else
+					{
+						$height_ratio = 1080 / $image_height;
+						$width_ratio = $height_ratio;
+					}
+
+					// Resize the file.
+					$new_width = floor($image_width * $width_ratio);
+					$new_height = floor($image_height * $height_ratio);
+
+					$resized_image = imagecreatetruecolor($new_width, $new_height);
+					$image = imagecreatefromjpeg($file);
+
+					imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $new_width, $new_height, $image_width, $image_height);
+
+					imagejpeg($resized_image, $resized_image_filename);
+
+					$resized_image = NULL;
+					$image = NULL;
+
+					$file = $resized_image_filename;
+				}	
+			}
+
 			// Compute file checksum.
 			$file_handle = @fopen($file, 'r');
 			if ($file_handle == FALSE)
