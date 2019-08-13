@@ -187,6 +187,7 @@ class ImagesProvider
 		}
 
 		arsort($files);
+		$files = array_reverse($files);
 		$files = array_keys($files);
 
 		return ($files) ? $files : false;
