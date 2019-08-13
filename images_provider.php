@@ -46,7 +46,7 @@ class ImagesProvider
 		$json[self::$JSON_SORT_KEY] = $sort;
 
 		// Get all files from the current directory.
-		$files = scandir(".");
+		$files = self::ScanDir(".");
 		if ($files == FALSE)
 		{
 			$files = [];
@@ -172,6 +172,27 @@ class ImagesProvider
 
 		echo $json_string;	
 	}
+
+	// Scan directory order by modified time date.
+	private static function ScanDir($dir)
+	{
+		$files = array();    
+		$scan = scandir($dir);
+
+		$file_count = count($scan);
+		for ($i = 0; $i < $file_count; ++$i)
+		{
+			$file = $scan[$i];
+			$files[$file] = filemtime($dir . '/' . $file);
+		}
+
+		arsort($files);
+		$files = array_keys($files);
+
+		return ($files) ? $files : false;
+	}
+
+
 
 	private static function CompareImageModificationTime($img0, $img1)
 	{
