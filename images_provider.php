@@ -186,8 +186,7 @@ class ImagesProvider
 			$files[$file] = filemtime($dir . '/' . $file);
 		}
 
-		arsort($files);
-		$files = array_reverse($files);
+		asort($files);
 		$files = array_keys($files);
 
 		return ($files) ? $files : false;
